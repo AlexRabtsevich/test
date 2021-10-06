@@ -17,43 +17,42 @@ namespace WindowsFormsApplication1
         {
             InitializeComponent();
 
-            using (BinaryReader bw = new BinaryReader(File.Open("база.txt", FileMode.Open)))
+           FileStream hhh =  File.Open("база.txt", FileMode.Open);
+            if (hhh.Length<  0)
             {
-                if (bw.ReadString() != null)
+                hhh.Close();
+                return;
+            }
+            using (BinaryReader bw = new BinaryReader(hhh))
+            {
+                int n = bw.ReadInt32();
+                int m = bw.ReadInt32();
+                for (int i = 0; i < m; ++i)
                 {
-                    int n = bw.ReadInt32();
-                    int m = bw.ReadInt32();
-                    for (int i = 0; i < m; ++i)
+                    dataGridView1.Rows.Add();
+                    for (int j = 0; j < n; ++j)
                     {
-                        if (bw.ReadString() != null && bw != null)
+                        if (bw.ReadBoolean())
                         {
-                            dataGridView1.Rows.Add();
-                            for (int j = 0; j < n; ++j)
-                            {
-                                if (bw.ReadBoolean())
-                                {
-                                    dataGridView1.Rows[i].Cells[j].Value = bw.ToString();
-                                }
-                                else bw.ReadBoolean();
-                            }
+                            dataGridView1.Rows[i].Cells[j].Value = bw.ReadString();
                         }
+                        else bw.ReadBoolean();
                     }
                 }
-                 
+
             }
         }
 
         class Student
         {
-            private string fio, subject, mark;
-            private DateTime date;
+            public string fio, subject, mark;
+            public DateTime date;
 
-            public Student(string fio, string subject, string mark, DateTime date) 
+            public Student(string fio, string subject, string mark) 
             {
                 this.fio = fio;
                 this.subject = subject;
-                this.mark = mark;
-                this.date = DateTime.Now;
+                this.mark = mark; ;
             }
              
             public void Vivod() 
@@ -91,7 +90,8 @@ namespace WindowsFormsApplication1
 
         private void button3_Click(object sender, EventArgs e)
         {
-            dataGridView1.Rows.Add(dataGridView1.RowCount, textBox3.Text, "", "Математика", DateTime.Now);
+            Student a = new Student(textBox3.Text, "Математика", textBox1.Text);
+            dataGridView1.Rows.Add(a.fio,"",a.subject, DateTime.Now);
         }
 
         private void Form1_FormClosed(object sender, FormClosedEventArgs e)
@@ -123,7 +123,8 @@ namespace WindowsFormsApplication1
 
         private void button4_Click(object sender, EventArgs e)
         {
-            dataGridView1.Rows.Add(new Student(textBox2.Text, "Математика", textBox1.Text, DateTime.Now));
+            Student a = new Student(textBox3.Text, "Математика", textBox1.Text);
+            dataGridView1.Rows.Add(a.fio, "", a.subject, DateTime.Now);
         }
     }
 }
